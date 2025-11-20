@@ -99,6 +99,8 @@ def analyze(word: str) -> dict:
 def main():
     print("\nὙπολογιστήρας\n")
 
+    # TODO: Add a complete numerical analysis in the result using our math functions
+
     while True:
         word = input("Εἰσάγετε την λέξιν (ἤ 'q'): ").strip()
         if word.lower() in {"quit", "exit", "q", ""}:

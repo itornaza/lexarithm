@@ -1,16 +1,18 @@
-# greek_isopsephy.py
+# lexarithm.py
 """
-Greek Isopsephy Calculator – Full System + Step-by-Step Reduction
+Greek Lexarithm Calculator – Full System + Step-by-Step Reduction
 Features:
   • 27-letter alphabet (including Ϝ=6, Ϙ=90, ϡ=900)
   • Full lexarithm + inline digital reduction with successive =
   • Traditional Greek numeral output
+  • Number theoretic analysis
 """
 
 from typing import Dict, List, Tuple
+from tester import *
 
-# Full historical isopsephy table
-ISOPSEPHY_TABLE: Dict[str, int] = {
+# Full lexarithm table
+LEXARITHM_TABLE: Dict[str, int] = {
     'Α':1, 'α':1, 'Ά':1,
     'Β':2, 'β':2,
     'Γ':3, 'γ':3,
@@ -40,32 +42,27 @@ ISOPSEPHY_TABLE: Dict[str, int] = {
     'Ϡ':900, 'ϡ':900,                          # Sampi
 }
 
-def isopsephy_value(word: str) -> int:
-    return sum(ISOPSEPHY_TABLE.get(ch.upper(), 0) for ch in word if ch.upper() in ISOPSEPHY_TABLE)
+def lexarithm_value(word: str) -> int:
+    return sum(LEXARITHM_TABLE.get(ch.upper(), 0) for ch in word if ch.upper() in LEXARITHM_TABLE)
 
-def isopsephy_breakdown(word: str) -> List[Tuple[str, int]]:
-    return [(ch, ISOPSEPHY_TABLE[ch.upper()]) for ch in word if ch.upper() in ISOPSEPHY_TABLE]
+def lexarithm_breakdown(word: str) -> List[Tuple[str, int]]:
+    return [(ch, LEXARITHM_TABLE[ch.upper()]) for ch in word if ch.upper() in LEXARITHM_TABLE]
 
 def reduction_steps(n: int) -> str:
-    """Return string like '888 = 8+8+8 = 24 = 2+4 = 6'"""
-    if n <= 9:
-        return str(n)
-    
+    """Return string like '666 = 6+6+6 = 18 = 1+8 = 9'"""
+    if n <= 9: return str(n)
     steps = [str(n)]
     current = n
-    
     while current > 9:
         digits = [int(d) for d in str(current)]
         step = "+".join(map(str, digits))
         current = sum(digits)
         steps.append(step)
         steps.append(str(current))
-    
     return " = ".join(steps)
 
 def to_greek_numeral(n: int) -> str:
-    if n <= 0:
-        return "0"
+    if n <= 0: return "0"
     thousands = {1:'͵α',2:'͵β',3:'͵γ',4:'͵δ',5:'͵ε',6:'͵ϝ',7:'͵ζ',8:'͵η',9:'͵θ'}
     units = {
         1:'α',2:'β',3:'γ',4:'δ',5:'ε',6:'ϝ',7:'ζ',8:'η',9:'θ',
@@ -83,11 +80,10 @@ def to_greek_numeral(n: int) -> str:
     return s + (" " if len(s) > 1 else "")
 
 def analyze(word: str) -> dict:
-    letters = isopsephy_breakdown(word)
+    letters = lexarithm_breakdown(word)
     total = sum(v for _, v in letters)
     breakdown = " + ".join(f"[{ch}={v}]" for ch, v in letters)
     full_chain = f"{breakdown} = {reduction_steps(total)}" if letters else "0"
-    
     return {
         "word": word,
         "total": total,
@@ -95,26 +91,22 @@ def analyze(word: str) -> dict:
         "greek_numeral": to_greek_numeral(total)
     }
 
-# CLI
 def main():
     print("\nὙπολογιστήρας\n")
-
-    # TODO: Add a complete numerical analysis in the result using our math functions
-
     while True:
         word = input("Εἰσάγετε την λέξιν (ἤ 'q'): ").strip()
         if word.lower() in {"quit", "exit", "q", ""}:
             print("\nΧαῖρε!\n")
             break
-
         data = analyze(word)
-
         if data["total"] == 0:
             print("No valid Greek letters found.\n")
             continue
-
-        print(f"\n{data['word'].upper()} = {data['chain'].upper()}\n")
-        # print(f"  → {data['greek_numeral']}\n")
+        print(f"\n{data['word'].upper()} = {data['chain'].upper()}")
+        print(f"  → Greek numeral: {data['greek_numeral'] or '—'}")
+        if data["total"] > 0:
+            test_number(data["total"])
+        print()
 
 if __name__ == "__main__":
     main()

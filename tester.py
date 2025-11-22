@@ -20,8 +20,6 @@ from highly_composite import * # type : ignore
 def test_number(num):
     """Run all special number tests on the given number."""
 
-    # TODO: proper divisors, abundant/deficient, tetractys
-
     tests = [
         ("Prime",             is_prime),
         ("Perfect",           is_perfect),

@@ -2,13 +2,11 @@
 # tester.py
 #
 
+__all__ = ['test_number']
+
 import os
 import sys
 
-# Add current directory to path (in case you're running from elsewhere)
-sys.path.append(os.path.dirname(__file__))
-
-# Import all your functions
 from prime import * # type : ignore
 from perfect import * # type : ignore
 from triangular import * # type : ignore
@@ -19,9 +17,11 @@ from factorial import * # type : ignore
 from tetrahedral import * # type : ignore
 from highly_composite import * # type : ignore
 
-
 def test_number(num):
     """Run all special number tests on the given number."""
+
+    # TODO: proper divisors, abundant/deficient, tetractys
+
     tests = [
         ("Prime",             is_prime),
         ("Perfect",           is_perfect),
@@ -46,7 +46,6 @@ def test_number(num):
         except Exception as e:
             result = False
             print(f"Error in {name}: {e}")
-
         status = "YES" if result else "no "
         if result:
             yes_count += 1
@@ -63,30 +62,27 @@ def test_number(num):
     elif yes_count >= 2:
         print("Pretty special!")
 
+    info = prime_analysis(num)
+    print("\nMore analysis \n")
+    print(f"• Prime factors       : {' × '.join(map(str, info['prime_factors'])) or '—'}")
+    print(f"• Proper divisors     : {', '.join(map(str, info['proper_divisors'])) or 'none'}")
+    print(f"• Σ proper divisors   : {info['sum_of_proper_divisors']}")
+    print(f"• Classification      : {info['abundance']}")
+    
     return results
 
-
 if __name__ == "__main__":
-    print("=" * 55)
-    print("     THE ULTIMATE SPECIAL NUMBER DETECTOR")
-    print(" Tests: Prime • Perfect • Triangular • Square • Cube")
-    print("        Fibonacci • Factorial • Tetrahedral • Highly Composite")
-    print("=" * 55)
-
     while True:
         try:
             user_input = input("\nEnter a positive integer (or 'q' to quit): ").strip()
             if user_input.lower() in ['q', 'quit', 'exit']:
                 print("Goodbye!")
                 break
-
             num = int(user_input)
             if num < 0:
                 print("Please enter a non-negative integer.")
                 continue
-
             test_number(num)
-
         except ValueError:
             print("Invalid input! Please enter a valid integer or 'q' to quit.")
         except KeyboardInterrupt:

@@ -8,8 +8,7 @@ import math
 
 def is_perfect_square(x):
     """Helper: returns True if x is a perfect square"""
-    if x < 0:
-        return False
+    if x < 0: return False
     root = int(math.sqrt(x))
     return root * root == x
 
@@ -18,20 +17,14 @@ def is_fibonacci(num):
     Return True if num is a Fibonacci number, False otherwise.
     Works for num >= 0
     """
-    if not isinstance(num, int) or num < 0:
-        return False
-    
-    # Check the two conditions
+    if not isinstance(num, int) or num < 0: return False
     return is_perfect_square(5 * num * num + 4) or \
            is_perfect_square(5 * num * num - 4)
-
 
 if __name__ == "__main__":
     try:
         number = int(input("Enter a non-negative integer to check if it's a Fibonacci number: ").strip())
-        
         if is_fibonacci(number):
-            # Optional: find its position in Fibonacci sequence
             a, b = 0, 1
             position = 0
             while a < number:
@@ -47,6 +40,5 @@ if __name__ == "__main__":
                     print(f"It's the {position}th Fibonacci number")
         else:
             print(f"No, {number} is not a Fibonacci number.")
-            
     except ValueError:
         print("Please enter a valid integer.")
